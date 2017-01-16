@@ -67,10 +67,16 @@ theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
+#deploy:
+#  type: git
+#  repo: git@github.com:RayKr/raykr.github.io.git
+#  branch: master
+#  message: send post
+#  name: raykr
+#  email: ray_kr@163.com
+
 deploy:
   type: git
-  repo: git@github.com:RayKr/raykr.github.io.git
-  branch: master
-  message: send post
-  name: raykr
-  email: ray_kr@163.com
+  repo: git@git.coding.net:raykr/swroom.git
+  branch: sw-pages
+
