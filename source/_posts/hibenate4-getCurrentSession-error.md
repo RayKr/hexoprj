@@ -1,7 +1,7 @@
 ---
 title: Hibenate4中getCurrentSession()报错
 date: 2017-01-17 15:43:32
-cetegories:
+categories:
 - experience
 ---
 ## 问题描述
