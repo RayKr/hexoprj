@@ -14,7 +14,7 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://ihave.news
 root: /
-permalink: :category/:title.html
+permalink: post/:category/:title.html
 permalink_defaults:
 
 # Directory
