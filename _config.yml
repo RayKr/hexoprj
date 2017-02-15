@@ -80,3 +80,36 @@ deploy:
   repo: git@git.coding.net:raykr/swroom.git
   branch: sw-pages
 
+# local search
+#search:
+#  path: search.xml
+#  field: post
+#  format: html
+#  limit: 10000
+
+algolia:
+  applicationID: 'AUYDG7697O'
+  apiKey: '7c31921f8807a2cd8bcdb706bf4c84df'
+  adminApiKey: '53788f17f5d48c41056b0564a27ae833'
+  indexName: 'ihave.news'
+  chunkSize: 5000
+
+# 压缩js、html、css、image
+neat_enable: true
+
+neat_html:
+  enable: true
+  exclude:
+
+neat_css:
+  enable: true
+  exclude:
+    - '*.min.css'
+
+neat_js:
+  enable: true
+  mangle: true
+  output:
+  compress:
+  exclude:
+    - '*.min.js'
