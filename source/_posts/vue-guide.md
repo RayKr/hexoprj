@@ -294,11 +294,154 @@ data: {
 ```
 
 ### v-if 与 v-show 对比
-v-if 是真实的条件渲染，因为它会确保条件块在切换当中适当地销毁与重建条件块内的事件监听器和子组件。
+`v-if` 是真实的条件渲染，因为它会确保条件块在切换当中适当地销毁与重建条件块内的事件监听器和子组件。
 
-v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——在条件第一次变为真时才开始局部编译（编译会被缓存起来）。
+`v-if` 也是惰性的：如果在初始渲染时条件为假，则什么也不做——在条件第一次变为真时才开始局部编译（编译会被缓存起来）。
 
-相比之下， v-show 简单得多——元素始终被编译并保留，只是简单地基于 CSS 切换。
+相比之下， `v-show` 简单得多——元素始终被编译并保留，只是简单地基于 CSS 切换。
 
-一般来说， v-if 有更高的切换消耗而 v-show 有更高的初始渲染消耗。因此，如果需要频繁切换使用 v-show 较好，如果在运行时条件不大可能改变则使用 v-if 较好。
+一般来说， `v-if` 有更高的切换消耗而 `v-show` 有更高的初始渲染消耗。因此，如果需要频繁切换使用 `v-show` 较好，如果在运行时条件不大可能改变则使用 `v-if` 较好。
 
+## 列表渲染
+使用`v-for`循环生成DOM元素，常用在列表项中。
+#### v-for基本用法
+```html
+<ul id="example-1">
+  <li v-for="item in items">
+    {{ item.message }}
+  </li>
+</ul>
+```
+```js
+var example1 = new Vue({
+  el: '#example-1',
+  data: {
+    items: [
+      {message: 'Foo' },
+      {message: 'Bar' }
+    ]
+  }
+})
+```
+v-for 还支持一个可选的第二个参数为当前项的**索引**
+```html
+<ul id="example-2">
+  <li v-for="(item, index) in items">
+    {{ parentMessage }} - {{ index }} - {{ item.message }}
+  </li>
+</ul>
+```
+同时v-for块内拥有对父作用域的属性的完全访问，例如上例中的 `parentMessage` 并不是 `items` 中的对象，但是也可以访问。
+```js
+var example2 = new Vue({
+  el: '#example-2',
+  data: {
+    parentMessage: 'Parent',
+    items: [
+      { message: 'Foo' },
+      { message: 'Bar' }
+    ]
+  }
+})
+```
+还可以使用 of 来替代 in 作为遍历分隔符：
+```js
+<li v-for="item of items">
+```
+
+#### Template v-for
+与 `v-if` 相同，如果一组元素一起渲染，则可以放在 `template` 标签中实现：
+```html
+<ul>
+  <template v-for="item in items">
+    <li>{{ item.msg }}</li>
+    <li class="divider"></li>
+  </template>
+</ul>
+```
+
+#### 对象迭代 v-for
+对象迭代，是指v-for迭代的不是多个对象，而是一个对象的多个属性。
+```html
+<ul id="repeat-object" class="demo">
+  <li v-for="value in object">
+    {{ value }}
+  </li>
+</ul>
+```
+```js
+new Vue({
+  el: '#repeat-object',
+  data: {
+    object: {
+      FirstName: 'John',
+      LastName: 'Doe',
+      Age: 30
+    }
+  }
+})
+```
+第二个参数为**键名**：
+```html
+<div v-for="(value, key) in object">
+  {{ key }} : {{ value }}
+</div>
+```
+第三个参数为**索引**：
+```html
+<div v-for="(value, key, index) in object">
+  {{ index }}. {{ key }} : {{ value }}
+</div>
+```
+
+#### 整数迭代 v-for
+```html
+<div>
+  <span v-for="n in 10">{{ n }}</span>
+</div>
+
+结果： 1 2 3 4 5 6 7 8 9 10
+```
+
+#### 组件和v-for
+涉及父组件与子组件的交互，子组件需要有个 props 来接收父组件的数据：
+```html
+<my-component
+  v-for="(item, index) in items"
+  v-bind:item="item"
+  v-bind:index="index">
+</my-component>
+```
+
+### 数组更新检测
+当数组数据有变动时，该怎样是更新视图，主要有**变异方法**和**重塑数组**两种。
+
+#### 变异方法
+数组内数据变化时用到的一系列方法，包括增加、删除元素等，此时会在原始数组上直接做修改，所以叫做变异方法。
+* push()
+* pop()
+* shift()
+* unshift()
+* splice()
+* sort()
+* reverse()
+
+#### 重塑数组
+与变异方法不同，重塑数组不在原始数组上做改动，而是重新生成一个新数组，成为非变异方法。
+* filter()
+* concat()
+* slice()
+
+#### 注意事项
+由于 JavaScript 的限制， Vue 不能检测以下变动的数组：
+当你利用索引直接设置一个项时，例如： `vm.items[indexOfItem] = newValue`
+当你修改数组的长度时，例如： vm.items.length = newLength
+为了避免第一种情况，以下两种方式将达到像 `vm.items[indexOfItem] = newValue` 的效果， 同时也将触发状态更新：
+```js
+// Vue.set
+Vue.set(example1.items, indexOfItem, newValue)
+```
+```js
+// Array.prototype.splice`
+example1.items.splice(indexOfItem, 1, newValue)
+```
