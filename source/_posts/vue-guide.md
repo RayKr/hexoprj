@@ -164,6 +164,7 @@ computed: {
 ## Class 与 Style 绑定
 
 ### 绑定Class
+关键字`v-bind:class`
 #### 对象语法
 ```html
 <!-- 对象写在行内 -->
@@ -237,3 +238,31 @@ Vue.component('my-component', {
 <p class="foo bar baz boo">Hi</p>
 ```
 
+### 绑定内联样式Style
+与绑定HTML Class写法相似，也包含对象语法和数组语法，并且在数组语法中添加对象，也可以结合计算属性使用。同时Vue会自动添加样式前缀。关键字是`v-bind:style`
+
+#### 对象语法
+```html
+<div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
+
+<!-- 为保证模板更清晰，推荐使用直接绑定一个对象 -->
+<div v-bind:style="styleObject"></div>
+```
+```js
+data: {
+  activeColor: 'red',
+  fontSize: 30
+}
+// or
+data: {
+  styleObject: {
+    color: 'red',
+    fontSize: '13px'
+  }
+}
+```
+
+#### 数组语法
+```html
+<div v-bind:style="[baseStyles, overridingStyles]">
+```
