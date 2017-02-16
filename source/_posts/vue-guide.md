@@ -161,5 +161,79 @@ computed: {
 ```
 现在在运行 `vm.fullName = 'John Doe'` 时， `setter` 会被调用， `vm.firstName` 和 `vm.lastName` 也会被对应更新。
 
+## Class 与 Style 绑定
 
+### 绑定Class
+#### 对象语法
+```html
+<!-- 对象写在行内 -->
+<div v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
+<!-- 直接绑定一个对象 -->
+<div v-bind:class="classObject"></div>
+```
+```js
+// 根据布尔类型的值，动态绑定class
+data: {
+  isActive: true,
+  hasError: false
+}
+
+// 对象的写法
+data: {
+  classObject: {
+    active: true,
+    'text-danger': false
+  }
+}
+
+// 配合计算属性一起使用
+data: {
+  isActive: true,
+  error: null
+},
+computed: {
+  classObject: function () {
+    return {
+      active: this.isActive && !this.error,
+      'text-danger': this.error && this.error.type === 'fatal',
+    }
+  }
+}
+```
+
+#### 数组语法
+```html
+<div v-bind:class="[activeClass, errorClass]">
+```
+```js
+data: {
+  activeClass: 'active',
+  errorClass: 'text-danger'
+}
+```
+在条件中切换class可用三元表达式：
+```html
+<div v-bind:class="[isActive ? activeClass : '', errorClass]">
+```
+数组语法中也可以使用对象：
+```html
+<div v-bind:class="[{ active: isActive }, errorClass]">
+```
+
+#### 用在组件中
+当你在一个定制的组件上用到 class 属性的时候，这些类将被添加到根元素上面，这个元素上已经存在的类不会被覆盖。
+组件：
+```js
+Vue.component('my-component', {
+  template: '<p class="foo bar">Hi</p>'
+})
+```
+模板：
+```html
+<my-component class="baz boo"></my-component>
+```
+渲染：
+```html
+<p class="foo bar baz boo">Hi</p>
+```
 
