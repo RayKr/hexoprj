@@ -266,3 +266,39 @@ data: {
 ```html
 <div v-bind:style="[baseStyles, overridingStyles]">
 ```
+
+## 条件渲染
+条件渲染有两种 `v-if` 和 `v-show`，都可以实现根据条件的真假，是否渲染DOM元素。
+
+### v-if
+有三个关键字：`v-if`, `v-else`, `v-else-if`，其中`v-else`和`v-else-if`必须有前置对应的关键字，否则不能被识别。
+```html
+<div v-if="type === 'A'"> A </div>
+<div v-else-if="type === 'B'"> B </div>
+<div v-else-if="type === 'C'"> C </div>
+<div v-else> Not A/B/C </div>
+```
+`v-if条件组`，可以使用 `template` 标签包装，此时其内的所有DOM元素都统一切换。
+```html
+<template v-if="ok">
+  <h1>Title</h1>
+  <p>Paragraph 1</p>
+  <p>Paragraph 2</p>
+</template>
+```
+
+### v-show
+用法与 `v-if` 一样，不同的是 `v-show` 元素始终渲染并保持，只是切换元素的CSS属性 `display`
+```html
+<h1 v-show="ok">Hello!</h1>
+```
+
+### v-if 与 v-show 对比
+v-if 是真实的条件渲染，因为它会确保条件块在切换当中适当地销毁与重建条件块内的事件监听器和子组件。
+
+v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——在条件第一次变为真时才开始局部编译（编译会被缓存起来）。
+
+相比之下， v-show 简单得多——元素始终被编译并保留，只是简单地基于 CSS 切换。
+
+一般来说， v-if 有更高的切换消耗而 v-show 有更高的初始渲染消耗。因此，如果需要频繁切换使用 v-show 较好，如果在运行时条件不大可能改变则使用 v-if 较好。
+
