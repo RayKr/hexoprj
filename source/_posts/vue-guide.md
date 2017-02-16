@@ -1,5 +1,5 @@
 ---
-title: Vue.js - 构建用户界面的渐进式框架
+title: Vue.js 基础
 date: 2017-02-15 08:56:17
 tags: front-end
 categories: front-end
@@ -7,8 +7,7 @@ categories: front-end
 
 > [**Vue.js 2.0 文档**](https://vuejs.bootcss.com/v2/guide/installation.html)
 
-## 基本用法
-
+## 模板语法
 ### 插值（数据绑定）
 #### 文本
 数据绑定的最常见形式，就是使用“Mustache”语法（双大括号）：
@@ -115,3 +114,52 @@ new Vue({
 {{ message | filterA('arg1', arg2) }}
 ```
 由于表达式的值总是第一参数，所以arg1是第二参数，arg2是第三参数。
+
+## 计算属性
+为了避免在模板中放入过多的逻辑，导致难以维护，所以复杂逻辑都应当放在计算属性里。Vue的计算属性基础例子如下：
+```html
+<div id="example">
+  <p>Original message: "{{ message }}"</p>
+  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+</div>
+```
+```js
+var vm = new Vue({
+  el: '#example',
+  data: {
+    message: 'Hello'
+  },
+  computed: {
+    // 作为计算属性的getter方法
+    reversedMessage: function () {
+      // `this`指向的是vm实例
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+```
+这里我们声明了一个计算属性 `reversedMessage` 。我们提供的函数将用作属性 `vm.reversedMessage` 的 `getter` 。
+
+其中计算缓存与 Methods 的区别是：**计算属性是基于它的依赖缓存**。计算属性只有在相关依赖内容发生改变时，才会重新取值。但是Methods每次都执行。
+
+### 计算setter
+```js
+computed: {
+  fullName: {
+    // getter
+    get: function () {
+      return this.firstName + ' ' + this.lastName
+    },
+    // setter
+    set: function (newValue) {
+      var names = newValue.split(' ')
+      this.firstName = names[0]
+      this.lastName = names[names.length - 1]
+    }
+  }
+}
+```
+现在在运行 `vm.fullName = 'John Doe'` 时， `setter` 会被调用， `vm.firstName` 和 `vm.lastName` 也会被对应更新。
+
+
+
