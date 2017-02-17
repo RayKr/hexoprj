@@ -449,3 +449,5 @@ example1.items.splice(indexOfItem, 1, newValue)
 ```js
 example1.items.splice(newLength)
 ```
+
+### 组件
