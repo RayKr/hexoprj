@@ -29,6 +29,8 @@ categories: front-end
 ```
 当input的值变化是，message显示的内容也会变，反过来如果message的值变化，input框内的内容也会随之改变。
 
+<!-- more -->
+
 #### 纯HTML
 使用“Mustache”语法只能绑定纯文本的数据，如果要输出真正的HTML，则需使用`v-html`指令：
 ```html
