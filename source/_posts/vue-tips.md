@@ -48,3 +48,22 @@ var vm = new Vue({
 data.areas.splice(index+1, 0, json);
 ```
 
+如果要实现修改了vm的data后，DOM更新结束后立刻调用一些操作（比如jquery的操作等），可以使用`nextTick(callback)`来实现，详细说明查看[异步更新队列](http://cn.vuejs.org/v2/guide/reactivity.html#异步更新队列)：
+```js
+var vm = new Vue({
+  // ...
+  methods: {
+      copyCabin: function () {
+          var vm = this,
+              data = vm.content.data,
+              index = data.length - 1,
+              node = data[index];
+          data.push(node);
+          // DOM更新后，重载插件绑定事件
+          vm.$nextTick(function () {
+              enableFunc();
+          });
+      }
+  }
+})
+```
