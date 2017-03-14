@@ -75,3 +75,23 @@ var vm = new Vue({
 
 ### JS的Math
 四舍五入用`Math.round(x)`，直接舍弃小数取整数用`Math.floor(x)`
+
+### 组件Template不能多根节点
+```console
+vue.js:2532[Vue warn]: Cannot use v-for on stateful component root element because it renders multiple elements:
+```
+原因是当抽取组件模板放置到 `<template>` 标签中时， `v-for` 循环不可以放置在根节点，因为会导致出现多根情况，如遇此状况，可以在外层再套一层 `div`：
+```html
+<template id="devList" >
+    <div>
+        <template v-for="dev1 in devs">
+            <div class="float-div-vue-for" :ename="dev1.name">
+                <a :id="dev1.deviceId" :href="dev1.url">
+                    <h5 style="text-align: center">{{dev1.name}}</h5>
+                    <img class="img-vue-for" :src=dev1.img :alt="dev1.name">
+                </a>
+            </div>
+        </template>
+    </div>
+</template>
+```
